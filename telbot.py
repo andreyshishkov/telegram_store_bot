@@ -1,6 +1,9 @@
 from telebot import TeleBot
 from settings import config
 from handlers.handler_main import HandlerMain
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 class Bot:

@@ -10,7 +10,7 @@ class Singleton(type):
         return cls._instance
 
 
-class DBManager(mataclass=Singleton):
+class DBManager(metaclass=Singleton):
 
     def __init__(self):
         pass

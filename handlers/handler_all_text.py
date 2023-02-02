@@ -32,9 +32,38 @@ class HandlerAllText(Handler):
             reply_markup=self.keyboards.start_menu()
         )
 
+    def pressed_btn_category(self, message):
+        self.bot.send_message(
+            message.chat.id,
+            'Каталог категорий товара',
+            reply_markup=self.keyboards.remove_menu()
+        )
+        self.bot.send_message(
+            message.chat.id,
+            'Сделайте свой выбор',
+            reply_markup=self.keyboards.category_menu()
+        )
+
+    def pressed_btn_product(self, message, product):
+        exp_product = config.KEYBOARD.get(product)
+        self.bot.send_message(
+            message.chat.id,
+            f'Категория {exp_product}',
+            reply_markup=self.keyboards.set_select_category(config.CATEGORY[product])
+        )
+        self.bot.send_message(
+            message.chat.id,
+            'Ok',
+            reply_markup=self.keyboards.category_menu()
+        )
+
     def handle(self):
         @self.bot.message_handler(func=lambda message: True)
         def handle(message):
+
+            # menu
+            if message.text == config.KEYBOARD['CHOOSE_GOODS']:
+                self.pressed_btn_category(message)
 
             if message.text == config.KEYBOARD['INFO']:
                 self.pressed_btn_info(message)
@@ -44,3 +73,13 @@ class HandlerAllText(Handler):
 
             if message.text == config.KEYBOARD['<<']:
                 self.pressed_btn_back(message)
+
+            # categories of products
+            if message.text == config.KEYBOARD['SEMIPRODUCT']:
+                self.pressed_btn_product(message, 'SEMIPRODUCT')
+
+            if message.text == config.KEYBOARD['GROCERY']:
+                self.pressed_btn_product(message, 'GROCERY')
+
+            if message.text == config.KEYBOARD['ICE_CREAM']:
+                self.pressed_btn_product(message, 'ICE_CREAM')

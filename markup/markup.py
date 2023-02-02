@@ -23,3 +23,20 @@ class Keyboards:
         self.markup.row(itm_btn_2, itm_btn_3)
 
         return self.markup
+
+    def info_menu(self):
+        self.markup = ReplyKeyboardMarkup(True, True)
+        itm_btn_1 = self.set_btn('<<')
+
+        self.markup.row(itm_btn_1)
+
+        return self.markup
+
+    def settings_menu(self):
+        self.markup = ReplyKeyboardMarkup(True, True)
+
+        itm_btn_1 = self.set_btn('<<')
+
+        self.markup.row(itm_btn_1)
+
+        return self.markup

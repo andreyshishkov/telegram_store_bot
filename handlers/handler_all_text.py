@@ -63,7 +63,7 @@ class HandlerAllText(Handler):
         # получаем список товаров в заказе
         count = self.DB.select_all_product_id(message.from_user.id)
 
-        # получаем количество товара по каждой позиции с заказе
+        # получаем количество товара по каждой позиции в заказе
         quantity = self.DB.select_order_quantity(count[self.step], message.from_user.id)
 
         self.send_message_order(count[self.step], quantity, message)
@@ -86,7 +86,7 @@ class HandlerAllText(Handler):
                 self.pressed_btn_back(message)
 
             if message.text == config.KEYBOARD['ORDER']:
-                if self.DB.count_rows_order() > 0:
+                if self.DB.count_rows_order(message.from_user.id) > 0:
                     self.pressed_btn_order(message)
                 else:
                     self.bot.send_message(

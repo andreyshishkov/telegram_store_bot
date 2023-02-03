@@ -57,6 +57,17 @@ class HandlerAllText(Handler):
             reply_markup=self.keyboards.category_menu()
         )
 
+    def pressed_btn_order(self, message):
+        self.step = 0
+
+        # получаем список товаров в заказе
+        count = self.DB.select_all_product_id(message.from_user.id)
+
+        # получаем количество товара по каждой позиции с заказе
+        quantity = self.DB.select_order_quantity(count[self.step], message.from_user.id)
+
+        self.send_message_order(count[self.step], quantity, message)
+
     def handle(self):
         @self.bot.message_handler(func=lambda message: True)
         def handle(message):
@@ -73,6 +84,17 @@ class HandlerAllText(Handler):
 
             if message.text == config.KEYBOARD['<<']:
                 self.pressed_btn_back(message)
+
+            if message.text == config.KEYBOARD['ORDER']:
+                if self.DB.count_rows_order() > 0:
+                    self.pressed_btn_order(message)
+                else:
+                    self.bot.send_message(
+                        message.chat.id,
+                        MESSAGES['no_orders'],
+                        parse_mode='HTML',
+                        reply_markup=self.keyboards.category_menu()
+                    )
 
             # categories of products
             if message.text == config.KEYBOARD['SEMIPRODUCT']:

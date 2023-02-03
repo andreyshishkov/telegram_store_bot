@@ -84,6 +84,11 @@ class DBManager(metaclass=Singleton):
         self._session.commit()
         self.close()
 
+    def count_rows_order(self, user_id):
+        result = self._session.query(Order).filter_by(user_id=user_id).count()
+        self.close()
+        return result
+
     def add_orders(self, quantity, product_id, user_id):
         all_id_product = self.select_all_product_id(user_id)
         quantity_product = self.select_single_product_quantity(product_id)

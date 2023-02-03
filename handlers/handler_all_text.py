@@ -68,6 +68,25 @@ class HandlerAllText(Handler):
 
         self.send_message_order(count[self.step], quantity, message)
 
+    def send_message_order(self, product_id, quantity, message):
+        self.bot.send_message(
+            message.chat.id,
+            MESSAGES['order_number'].format(self.step + 1),
+            parse_mode='HTML',
+        )
+
+        self.bot.send_message(
+            message.chat.id,
+            MESSAGES['order'].format(
+                self.DB.select_single_product_name(product_id),
+                self.DB.select_single_product_title(product_id),
+                self.DB.select_single_product_price(product_id),
+                self.DB.select_order_quantity(product_id, message.from_user.id)
+            ),
+            parse_mode='HTML',
+            reply_markup=self.keyboards.orders_menu(self.step, quantity)
+        )
+
     def handle(self):
         @self.bot.message_handler(func=lambda message: True)
         def handle(message):

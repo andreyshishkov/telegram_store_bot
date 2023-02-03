@@ -60,7 +60,7 @@ class Keyboards:
     def set_inline_btn(name):
         return InlineKeyboardButton(
             str(name),
-            callback_data=name.id,
+            callback_data=str(name.id),
         )
 
     def set_select_category(self, category):

@@ -6,7 +6,7 @@ load_dotenv()
 
 TOKEN = os.environ.get('TOKEN')
 
-NAME_DB = 'products.sqlite'
+NAME_DB = 'products.db'
 VERSION = '0.0.1'
 AUTHOR = 'User'
 

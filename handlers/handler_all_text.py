@@ -87,6 +87,39 @@ class HandlerAllText(Handler):
             reply_markup=self.keyboards.orders_menu(self.step, quantity)
         )
 
+    # buttons of order menu
+    def pressed_btn_up(self, message):
+        count = self.DB.select_all_product_id(message.from_user.id)
+
+        quantity_order = self.DB.select_order_quantity(count[self.step], message.from_user.id)
+        quantity_product = self.DB.select_single_product_quantity(count[self.step])
+
+        if quantity_product > 0:
+            quantity_order += 1
+            quantity_product -= 1
+
+            self.DB.update_product_value(count[self.step], 'quantity', quantity_product)
+            self.DB.update_order_value(count[self.step], message.from_user.id, 'quantity', quantity_order)
+
+        self.send_message_order(count[self.step], quantity_order, message)
+
+    def pressed_btn_down(self, message):
+        count = self.DB.select_all_product_id(message.from_user.id)
+
+        quantity_order = self.DB.select_order_quantity(count[self.step], message.from_user.id)
+        quantity_product = self.DB.select_single_product_quantity(count[self.step])
+
+        if quantity_order > 0:
+            quantity_order -= 1
+            quantity_product += 1
+
+            self.DB.update_product_value(count[self.step], 'quantity', quantity_product)
+            self.DB.update_order_value(count[self.step], message.from_user.id, 'quantity', quantity_order)
+        self.send_message_order(count[self.step], quantity_order, message)
+
+    def pressed_btn_x(self, message):
+
+
     def handle(self):
         @self.bot.message_handler(func=lambda message: True)
         def handle(message):
@@ -124,3 +157,15 @@ class HandlerAllText(Handler):
 
             if message.text == config.KEYBOARD['ICE_CREAM']:
                 self.pressed_btn_product(message, 'ICE_CREAM')
+
+            #  menu of order
+            if message.text == config.KEYBOARD['UP']:
+                self.pressed_btn_up(message)
+            if message.text == config.KEYBOARD['DOUWN']:
+                self.pressed_btn_down(message)
+            if message.text == config.KEYBOARD['X']:
+                self.pressed_btn_x(message)
+            if message.text == config.KEYBOARD['BACK_STEP']:
+                self.pressed_btn_back_step(message)
+            if message.text == config.KEYBOARD['NEXT_STEP']:
+                self.pressed_btn_next_step(message)

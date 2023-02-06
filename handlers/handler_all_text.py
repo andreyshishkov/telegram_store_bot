@@ -84,7 +84,7 @@ class HandlerAllText(Handler):
                 self.DB.select_order_quantity(product_id, message.from_user.id)
             ),
             parse_mode='HTML',
-            reply_markup=self.keyboards.orders_menu(self.step, quantity)
+            reply_markup=self.keyboards.orders_menu(self.step, quantity, message.from_user.id)
         )
 
     # buttons of order menu

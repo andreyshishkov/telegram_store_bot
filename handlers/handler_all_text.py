@@ -158,6 +158,19 @@ class HandlerAllText(Handler):
             message
         )
 
+    def pressed_btn_next_step(self, message):
+        if self.step < (self.DB.count_rows_order(message.from_user.id) - 1):
+            self.step += 1
+
+        count = self.DB.select_all_product_id(message.from_user.id)
+        quantity = self.DB.select_order_quantity(count[self.step], message.from_user.id)
+
+        self.send_message_order(
+            count[self.step],
+            quantity,
+            message
+        )
+
     def handle(self):
         @self.bot.message_handler(func=lambda message: True)
         def handle(message):
